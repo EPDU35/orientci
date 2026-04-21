@@ -2,10 +2,8 @@ const aiService = require("../services/ai.service");
 
 const handleChat = async (req, res, next) => {
     try {
-        // Protection contre req.body undefined
         const { message, profil = {} } = req.body || {};
 
-        // Validation renforcée
         if (!message || typeof message !== "string" || message.trim() === "") {
             return res.status(400).json({
                 success: false,
@@ -13,12 +11,10 @@ const handleChat = async (req, res, next) => {
             });
         }
 
-        const reponse = await aiService.sendMessage(message, profil);
+        const reponse = await aiService.sendMessage(message.trim(), profil);
 
-        res.json({
-            success: true,
-            reponse: reponse
-        });
+        res.json({ success: true, reponse });
+
     } catch (error) {
         next(error);
     }

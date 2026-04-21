@@ -1,5 +1,5 @@
 const errorHandler = (err, req, res, next) => {
-    console.error("Erreur serveur :", err);
+    console.error("Erreur serveur :", err.message || err);
 
     const status = err.status || 500;
     const message = err.message || "Une erreur interne est survenue";
