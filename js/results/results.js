@@ -20,6 +20,12 @@ const FILIERE_LABELS = {
 
 const Results = {
     init() {
+        const user = Storage.loadUser();
+        const greetEl = document.getElementById('userGreeting');
+        if (greetEl && user && user.username) {
+            greetEl.textContent = user.username;
+        }
+
         const answers = Storage.loadAnswers();
 
         if (!answers || Object.keys(answers).length < 5) {

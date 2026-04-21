@@ -355,7 +355,7 @@
             </ul>
 
             <div class="navbar-actions">
-                <a href="auth.html" class="btn-secondary" style="padding: 10px 20px; font-size: 0.85rem;">Connexion</a>
+                <a href="auth.html" class="btn-secondary" id="navConnexion" style="padding: 10px 20px; font-size: 0.85rem;">Connexion</a>
                 <a href="quiz.html" class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">
                     Commencer
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
@@ -389,7 +389,7 @@
                         </h1>
 
                         <p class="hero-subtitle">
-                            Un moteur de recommandation local, ancré dans les réalités du marché ivoirien.
+                            Un moteur de recommandation local, ancré dans les réalités du marché ivoirien. Sans compte, sans inscription.
                         </p>
 
                         <div class="hero-cta-group">
@@ -402,22 +402,12 @@
                             </a>
                         </div>
 
+                        <p class="hero-note" style="margin-top: 14px;">
+                            Sans compte · Sans inscription · Gratuit
+                        </p>
                     </div>
 
-                    <!-- colonne droite visible uniquement desktop (CSS grid la masque sur mobile/tablet) -->
-                    <div class="hero-right">
-                        <p class="hero-right-title">Ce que tu obtiens</p>
-                        <ul class="hero-right-list">
-                            <li>15 questions adaptées au contexte ivoirien</li>
-                            <li>Top 5 filières avec scores en % et justifications</li>
-                            <li>Données réelles : salaires FCFA, écoles CI</li>
-                            <li>Assistant IA disponible après le quiz</li>
-                            <li>Catalogue de 20+ métiers et 10+ établissements</li>
-                        </ul>
-                        <a href="quiz.html" class="btn-primary" style="width: 100%; justify-content: center;">
-                            Faire le quiz maintenant
-                        </a>
-                    </div>
+                    <div class="hero-right" style="display:none;"></div>
 
                 </div>
             </div>
@@ -601,7 +591,33 @@
             });
         }
     });
+
+    // Liens protégés : redirige vers auth si pas connecté
+    function guardedHref(page) {
+        const user = Storage.loadUser();
+        if (user && user.username) {
+            window.location.href = page;
+        } else {
+            window.location.href = 'auth.html?redirect=' + page;
+        }
+    }
+
+    document.querySelectorAll('[data-protected]').forEach(el => {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            guardedHref(this.dataset.protected);
+        });
+    });
+
+    // Adapter navbar si connecté
+    const user = Storage.loadUser();
+    if (user && user.username) {
+        const connLink = document.getElementById('navConnexion');
+        if (connLink) {
+            connLink.textContent = user.username;
+            connLink.href = 'results.html';
+        }
+    }
 </script>
-<footer> <p>&copy; Développe by VORTEXON</p></footer>
 </body>
 </html>
