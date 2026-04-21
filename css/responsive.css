@@ -1,8 +1,7 @@
-/* ===== RESPONSIVE.CSS — OrientCI ===== */
+/* ===== RESPONSIVE ===== */
 
-/* base: mobile-first (max 430px) */
+/* --- BASE : mobile 375px+ --- */
 
-/* safe area for iPhones */
 .has-bottom-nav {
     padding-bottom: calc(72px + env(safe-area-inset-bottom));
 }
@@ -11,13 +10,167 @@
     padding: 0 20px;
 }
 
-/* quand le contenu commence après le header sticky */
-.content-start {
-    padding-top: 12px;
+/* --- NAVBAR : mobile = hamburger + bottom nav --- */
+
+@media (max-width: 767px) {
+    .navbar-links {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--blanc-pur);
+        border-bottom: 1px solid var(--gris-light);
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 0;
+        z-index: 99;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .navbar-links.open {
+        display: flex;
+    }
+
+    .navbar-links li {
+        width: 100%;
+    }
+
+    .navbar-links a {
+        display: block;
+        padding: 14px 24px;
+        font-size: 0.95rem;
+        border-bottom: 1px solid var(--gris-light);
+    }
+
+    .navbar-links li:last-child a {
+        border-bottom: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .navbar-actions .btn-primary,
+    .navbar-actions .btn-secondary {
+        display: none;
+    }
+
+    .bottom-nav {
+        display: block;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-dark {
+        width: 100%;
+        padding: 15px 20px;
+    }
+
+    .tab-bar {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 2px;
+    }
+
+    .tab-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-/* ---------- OVERRIDES PETITS ECRANS ---------- */
-@media (max-width: 360px) {
+/* --- TABLET : 768px – 1023px --- */
+
+@media (min-width: 768px) {
+    .hamburger {
+        display: none;
+    }
+
+    .bottom-nav {
+        display: none;
+    }
+
+    .has-bottom-nav {
+        padding-bottom: 0;
+    }
+
+    .page-content {
+        padding: 0 32px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-dark {
+        width: auto;
+    }
+
+    .hero-dark {
+        padding: 40px 40px;
+    }
+
+    .hero-dark h1 {
+        font-size: 2.8rem;
+    }
+}
+
+/* --- DESKTOP : 1024px+ --- */
+
+@media (min-width: 1024px) {
+    body {
+        padding-top: 0;
+    }
+
+    .navbar-inner {
+        height: 68px;
+    }
+
+    .hero-dark {
+        padding: 56px 56px;
+    }
+
+    .hero-dark h1 {
+        font-size: 3.2rem;
+    }
+
+    .feature-item {
+        gap: 20px;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .result-card,
+    .metier-card,
+    .ecole-card,
+    .filiere-card {
+        padding: 20px;
+    }
+
+    .chat-bubble {
+        max-width: 60%;
+    }
+}
+
+/* --- LARGE DESKTOP : 1280px+ --- */
+
+@media (min-width: 1280px) {
+    .container {
+        padding: 0 40px;
+    }
+}
+
+/* --- TRES PETIT ECRAN : < 360px --- */
+
+@media (max-width: 359px) {
     :root {
         font-size: 14px;
     }
@@ -25,133 +178,4 @@
     .stat-number {
         font-size: 1.2rem;
     }
-
-    .hero-dark h1 {
-        font-size: 2rem;
-    }
-}
-
-/* ---------- GRAND MOBILE (>430px) — centrage bureau ---------- */
-@media (min-width: 431px) {
-    body {
-        background: #e8e4db;
-    }
-
-    .page {
-        box-shadow: 0 0 60px rgba(0,0,0,0.12);
-        background: var(--blanc);
-    }
-
-    .bottom-nav {
-        border-radius: 0;
-    }
-
-    .splash {
-        max-width: 430px;
-        left: 50%;
-        transform: translateX(-50%);
-        right: auto;
-    }
-}
-
-/* ---------- TABLET+ ---------- */
-@media (min-width: 768px) {
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: 100vh;
-        padding: 24px 0;
-    }
-}
-
-/* ---------- ANIMATIONS RÉDUITES ---------- */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* ---------- SCROLL HORIZONTAL DES CHIPS ---------- */
-.filters-scroll {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 2px 0;
-}
-
-.filters-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-/* ---------- LISTE DE CARTES ---------- */
-.cards-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* ---------- PAGE FADE IN ---------- */
-.page-fade {
-    animation: fadeInUp 0.35s ease both;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* staggered children */
-.page-fade > *:nth-child(1) { animation-delay: 0.05s; }
-.page-fade > *:nth-child(2) { animation-delay: 0.1s; }
-.page-fade > *:nth-child(3) { animation-delay: 0.15s; }
-.page-fade > *:nth-child(4) { animation-delay: 0.2s; }
-.page-fade > *:nth-child(5) { animation-delay: 0.25s; }
-
-/* slide-in question */
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.question-enter {
-    animation: slideInRight 0.3s ease both;
-}
-
-/* loading dots */
-@keyframes loadingDots {
-    0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
-    40% { opacity: 1; transform: scale(1); }
-}
-
-.dot-1 { animation: loadingDots 1.2s ease-in-out infinite 0s; }
-.dot-2 { animation: loadingDots 1.2s ease-in-out infinite 0.2s; }
-.dot-3 { animation: loadingDots 1.2s ease-in-out infinite 0.4s; }
-
-.typing-dots {
-    display: flex;
-    gap: 4px;
-    padding: 4px 0;
-}
-
-.typing-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gris);
 }

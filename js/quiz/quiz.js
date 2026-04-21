@@ -1,111 +1,153 @@
-// quiz.js — logique complète du quiz
+let currentQ = 0;
+let answers = Storage.loadAnswers() || {};
 
-const Quiz = {
-    current: 0,
-    answers: {},
+const progressFill = document.getElementById('progressFill');
+const questionLabel = document.getElementById('questionLabel');
+const sectionLabel = document.getElementById('sectionLabel');
+const questionNum = document.getElementById('questionNum');
+const questionText = document.getElementById('questionText');
+const optionsList = document.getElementById('optionsList');
+const hintText = document.getElementById('hintText');
+const btnSuivant = document.getElementById('btnSuivant');
+const btnPrecedent = document.getElementById('btnPrecedent');
+const btnRetour = document.getElementById('btnRetour');
+const questionContainer = document.getElementById('questionContainer');
 
-    init() {
-        this.answers = Storage.loadAnswers();
-        this.render();
-        this.bindNav();
-    },
+function renderQuestion(index) {
+  const q = QUESTIONS[index];
+  const total = QUESTIONS.length;
 
-    render() {
-        const q = QUESTIONS[this.current];
-        const total = QUESTIONS.length;
-        const section = SECTIONS[q.section];
+  questionLabel.textContent = `Question ${index + 1} sur ${total}`;
+  sectionLabel.textContent = q.section;
+  questionNum.textContent = `QUESTION ${index + 1} / ${total}`;
+  questionText.textContent = q.text;
+  hintText.textContent = q.hint;
 
-        document.getElementById('questionLabel').textContent = `Question ${q.id} sur ${total}`;
-        document.getElementById('sectionLabel').textContent = section.label;
-        document.getElementById('questionNum').textContent = `QUESTION ${q.id} / ${total}`;
-        document.getElementById('questionText').textContent = q.text;
-        document.getElementById('hintText').textContent = section.hint;
+  const pct = ((index + 1) / total) * 100;
+  progressFill.style.width = pct + '%';
 
-        const progress = ((this.current + 1) / total) * 100;
-        document.getElementById('progressFill').style.width = `${progress}%`;
+  optionsList.innerHTML = '';
+  q.options.forEach(function (opt) {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option' + (answers[q.id] === opt.value ? ' selected' : '');
+    btn.dataset.value = opt.value;
+    btn.innerHTML = `
+      <span class="quiz-option-radio">
+        <span class="quiz-option-radio-dot"></span>
+      </span>
+      <span class="quiz-option-text">${opt.label}</span>
+    `;
 
-        this.renderOptions(q);
-        this.updateNav();
+    btn.addEventListener('click', function () {
+      answers[q.id] = opt.value;
+      Storage.saveAnswers(answers);
+      document.querySelectorAll('.quiz-option').forEach(function (b) {
+        b.classList.remove('selected');
+      });
+      btn.classList.add('selected');
+      updateNav();
+    });
 
-        const container = document.getElementById('questionContainer');
-        container.classList.remove('question-enter');
-        void container.offsetWidth;
-        container.classList.add('question-enter');
-    },
+    optionsList.appendChild(btn);
+  });
 
-    renderOptions(q) {
-        const list = document.getElementById('optionsList');
-        const saved = this.answers[q.id];
+  updateNav();
+}
 
-        list.innerHTML = q.options.map(opt => `
-            <button class="quiz-option ${saved === opt.value ? 'selected' : ''}"
-                    data-value="${opt.value}">
-                <span class="option-radio"></span>
-                <span class="option-label">${opt.label}</span>
-            </button>
-        `).join('');
+function updateNav() {
+  const q = QUESTIONS[currentQ];
+  const answered = !!answers[q.id];
 
-        list.querySelectorAll('.quiz-option').forEach(btn => {
-            btn.addEventListener('click', () => this.selectOption(btn, q.id));
-        });
-    },
+  if (answered) {
+    btnSuivant.style.opacity = '1';
+    btnSuivant.style.pointerEvents = 'auto';
+  } else {
+    btnSuivant.style.opacity = '0.4';
+    btnSuivant.style.pointerEvents = 'none';
+  }
 
-    selectOption(btn, questionId) {
-        document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        this.answers[questionId] = btn.dataset.value;
-        Storage.saveAnswers(this.answers);
-        this.updateNav();
-    },
+  if (currentQ > 0) {
+    btnPrecedent.style.opacity = '1';
+    btnPrecedent.style.pointerEvents = 'auto';
+  } else {
+    btnPrecedent.style.opacity = '0.4';
+    btnPrecedent.style.pointerEvents = 'none';
+  }
 
-    updateNav() {
-        const q = QUESTIONS[this.current];
-        const hasAnswer = !!this.answers[q.id];
-        const isFirst = this.current === 0;
-        const isLast = this.current === QUESTIONS.length - 1;
+  const isLast = currentQ === QUESTIONS.length - 1;
+  btnSuivant.innerHTML = isLast
+    ? 'Voir mes résultats <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>'
+    : 'Suivant <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+}
 
-        const btnPrev = document.getElementById('btnPrecedent');
-        const btnNext = document.getElementById('btnSuivant');
+function animateTransition(cb) {
+  questionContainer.style.opacity = '0';
+  questionContainer.style.transform = 'translateX(12px)';
+  setTimeout(function () {
+    cb();
+    questionContainer.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    questionContainer.style.opacity = '1';
+    questionContainer.style.transform = 'translateX(0)';
+    setTimeout(function () {
+      questionContainer.style.transition = '';
+    }, 200);
+  }, 120);
+}
 
-        btnPrev.style.opacity = isFirst ? '0.4' : '1';
-        btnPrev.style.pointerEvents = isFirst ? 'none' : 'auto';
+btnSuivant.addEventListener('click', function () {
+  const isLast = currentQ === QUESTIONS.length - 1;
 
-        btnNext.style.opacity = hasAnswer ? '1' : '0.4';
-        btnNext.style.pointerEvents = hasAnswer ? 'auto' : 'none';
-
-        if (isLast && hasAnswer) {
-            btnNext.innerHTML = `Voir mes résultats <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`;
-        } else {
-            btnNext.innerHTML = `Suivant <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`;
-        }
-    },
-
-    bindNav() {
-        document.getElementById('btnPrecedent').addEventListener('click', () => {
-            if (this.current > 0) {
-                this.current--;
-                this.render();
-            }
-        });
-
-        document.getElementById('btnSuivant').addEventListener('click', () => {
-            if (this.current < QUESTIONS.length - 1) {
-                this.current++;
-                this.render();
-            } else {
-                window.location.href = 'results.html';
-            }
-        });
-
-        document.getElementById('btnRetour').addEventListener('click', () => {
-            if (this.current > 0) {
-                this.current--;
-                this.render();
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
+  if (isLast) {
+    // Calcule le profil et redirige vers auth ou résultats
+    buildProfile();
+    const user = Storage.loadUser();
+    if (user) {
+      window.location.href = 'results.html';
+    } else {
+      window.location.href = 'auth.html?from=quiz';
     }
-};
+    return;
+  }
 
-document.addEventListener('DOMContentLoaded', () => Quiz.init());
+  animateTransition(function () {
+    currentQ++;
+    renderQuestion(currentQ);
+  });
+});
+
+btnPrecedent.addEventListener('click', function () {
+  if (currentQ === 0) return;
+  animateTransition(function () {
+    currentQ--;
+    renderQuestion(currentQ);
+  });
+});
+
+btnRetour.addEventListener('click', function () {
+  window.location.href = 'index.html';
+});
+
+function buildProfile() {
+  const profile = {
+    matieres: answers[1] || null,
+    matiere_fav: answers[2] || null,
+    niveau_maths: answers[3] || null,
+    serie: answers[4] || null,
+    environnement: answers[5] || null,
+    secteur_ci: answers[6] || null,
+    activite: answers[7] || null,
+    reussite: answers[8] || null,
+    modele: answers[9] || null,
+    loisirs: answers[10] || null,
+    budget: answers[11] || null,
+    duree: answers[12] || null,
+    mobilite: answers[13] || null,
+    contrainte_fam: answers[14] || null,
+    priorite: answers[15] || null,
+    completedAt: Date.now()
+  };
+
+  Storage.saveProfile(profile);
+}
+
+renderQuestion(currentQ);
