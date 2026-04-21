@@ -1,91 +1,106 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#f5f0e8">
-    <title>Résultats — OrientCI</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/responsive.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f0e8">
+  <title>Résultats — OrientCI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
 
 <div class="page" id="app">
 
-    <main class="page-content has-bottom-nav page-fade" style="padding-top: 0;">
+  <main class="page-content has-bottom-nav page-fade" style="padding-top: 0;">
 
-        <div class="hero-dark" style="margin-bottom: 20px; border-radius: 0 0 var(--r-xl) var(--r-xl);">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-                <p class="label-sm orange">Profil analysé</p>
-                <span id="userGreeting" style="font-size: 0.78rem; color: rgba(255,255,255,0.40); font-weight: 500;"></span>
-            </div>
-            <h1 style="font-family: var(--font-display); font-weight: 800; font-size: 2rem; line-height: 1.1; color: white; letter-spacing: -0.5px; margin-bottom: 8px;">
-                Tes<br>recommandations
-            </h1>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.82rem; margin-bottom: 16px;">
-                Basé sur tes matières, intérêts et contraintes
-            </p>
-            <div class="badge badge-orange" style="font-size: 0.62rem;" id="topBadge">Top 5 filières identifiées</div>
+    <div class="hero-dark" style="margin-bottom: 20px; border-radius: 0 0 var(--r-xl) var(--r-xl);">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px;">
+        <p class="label-sm orange">Profil analysé</p>
+        <div id="userGreeting" style="display:none; align-items:center; gap:8px;">
+          <a href="profile.html" style="text-decoration:none;"><div class="user-avatar" id="userAvatar" style="cursor:pointer;" title="Mon profil">E</div></a>
         </div>
-
-        <div style="margin-bottom: 8px; padding: 0 0 4px;">
-            <p class="section-title">Classement personnalisé</p>
-        </div>
-
-        <div class="cards-list" id="resultsList" style="margin-bottom: 24px;">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 40px 0; color: var(--gris); font-size: 0.88rem;">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                Calcul en cours...
-            </div>
-        </div>
-
-        <div id="noResultsState" style="display: none;">
-            <div class="empty-state">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gris)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                <p>Aucune filière ne correspond exactement à ton profil. Essaie de modifier tes contraintes.</p>
-                <button class="btn-secondary" onclick="window.location.href='quiz.html'" style="width: auto; padding: 12px 24px;">
-                    Modifier le quiz
-                </button>
-            </div>
-        </div>
-
-    </main>
-
-    <div style="position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; padding: 10px 20px; background: var(--blanc); border-top: 1px solid var(--gris-light); display: flex; gap: 10px; z-index: 90;">
-        <button class="btn-secondary" onclick="window.location.href='quiz.html'" style="flex: 0 0 auto; padding: 12px 18px; font-size: 0.85rem;">
-            Modifier
-        </button>
-        <button class="btn-primary" onclick="window.location.href='catalogue.html'" style="flex: 1; padding: 13px 16px; font-size: 0.9rem;">
-            Explorer les métiers
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
+      </div>
+      <h1 style="font-family: var(--font-display); font-weight: 800; font-size: 2rem; line-height: 1.1; color: white; letter-spacing: -0.5px; margin-bottom: 8px;">
+        Tes<br>recommandations
+      </h1>
+      <p style="color: rgba(255,255,255,0.5); font-size: 0.82rem; margin-bottom: 16px;">
+        Basé sur tes matières, intérêts et contraintes
+      </p>
+      <div class="badge badge-orange" style="font-size: 0.62rem;" id="topBadge">Top 5 filières identifiées</div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-            Accueil
-        </a>
-        <a href="catalogue.html" class="nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            Catalogue
-        </a>
-        <a href="results.html" class="nav-item active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            Résultats
-        </a>
-        <a href="assistant.html" class="nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Assistant
-        </a>
-    </nav>
+    <p class="section-title" style="margin-bottom: 12px; padding: 0 0 4px;">Classement personnalisé</p>
+
+    <div class="cards-list" id="resultsList" style="margin-bottom: 24px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 40px 0; color: var(--gris); font-size: 0.88rem;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Calcul en cours...
+      </div>
+    </div>
+
+    <div id="noResultsState" style="display: none;">
+      <div class="empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gris)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <p>Complète le quiz pour voir tes recommandations personnalisées.</p>
+        <button class="btn-secondary" onclick="window.location.href='quiz.html'" style="width:auto; padding:12px 24px;">
+          Commencer le quiz
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <div style="position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; padding: 10px 20px; background: var(--blanc); border-top: 1px solid var(--gris-light); display: flex; gap: 10px; z-index: 90;">
+    <button class="btn-secondary" onclick="window.location.href='quiz.html'" style="flex: 0 0 auto; padding: 12px 18px; font-size: 0.85rem;">
+      Modifier
+    </button>
+    <button class="btn-primary" onclick="window.location.href='catalogue.html'" style="flex: 1; padding: 13px 16px; font-size: 0.9rem;">
+      Explorer les métiers
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Accueil
+    </a>
+    <a href="catalogue.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Catalogue
+    </a>
+    <a href="results.html" class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Résultats
+    </a>
+    <a href="assistant.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant
+    </a>
+  </nav>
 </div>
 
 <script src="js/core/storage.js"></script>
-<script src="js/core/auth-guard.js"></script>
+<script>
+  if (!Storage.isLoggedIn()) {
+    window.location.replace('auth.html?from=results');
+  } else if (!Storage.hasUsername()) {
+    window.location.replace('username.html?from=results');
+  }
+</script>
 <script src="js/scoring/weights.js"></script>
 <script src="js/scoring/scoring.js"></script>
 <script src="js/results/results.js"></script>
+<script>
+  const user = Storage.loadUser();
+  if (user && user.username) {
+    const greeting = document.getElementById('userGreeting');
+    const avatar = document.getElementById('userAvatar');
+    greeting.style.display = 'flex';
+    avatar.textContent = user.username[0].toUpperCase();
+  }
+</script>
 </body>
 </html>

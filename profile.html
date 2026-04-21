@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f0e8">
+  <title>Mon Profil — OrientCI</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div class="page" id="app">
+
+  <header class="top-header">
+    <a href="results.html" style="display:flex; align-items:center; gap:6px; color:var(--gris); font-size:0.85rem; font-weight:500; text-decoration:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Retour
+    </a>
+    <a href="index.html" class="logo">Orient<span>CI</span></a>
+  </header>
+
+  <div class="page-content has-bottom-nav page-fade" style="padding-top:16px;">
+
+    <!-- Avatar + nom -->
+    <div style="display:flex; flex-direction:column; align-items:center; gap:12px; margin-bottom:28px;">
+      <div class="user-avatar" id="profileAvatar" style="width:72px; height:72px; border-radius:24px; font-size:1.8rem;">?</div>
+      <div style="text-align:center;">
+        <p id="profileName" style="font-family:var(--font-display); font-weight:800; font-size:1.3rem; letter-spacing:-0.5px; margin-bottom:4px;">—</p>
+        <p id="profileEmail" style="font-size:0.8rem; color:var(--gris);">—</p>
+      </div>
+      <button id="btnEditName" style="display:flex; align-items:center; gap:6px; padding:8px 16px; background:var(--gris-light); border:none; border-radius:var(--r-full); font-size:0.8rem; font-weight:600; font-family:var(--font-body); cursor:pointer; color:var(--noir);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Modifier le pseudo
+      </button>
+    </div>
+
+    <!-- Modifier pseudo inline -->
+    <div id="editNameForm" style="display:none; margin-bottom:20px;">
+      <div class="auth-card" style="padding:16px;">
+        <label style="font-size:0.78rem; font-weight:600; color:var(--gris); display:block; margin-bottom:8px;">Nouveau pseudo</label>
+        <input type="text" class="auth-input" id="newNameInput" placeholder="Ton prénom ou pseudo" maxlength="24" style="margin-bottom:12px;">
+        <div style="display:flex; gap:8px;">
+          <button class="btn-dark" id="btnSaveName" style="flex:1; padding:12px;">Sauvegarder</button>
+          <button class="btn-secondary" id="btnCancelEdit" style="flex:0 0 auto; padding:12px 16px;">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résultats quiz -->
+    <div style="margin-bottom:8px;">
+      <p class="section-title" style="margin-bottom:12px;">Mes résultats quiz</p>
+    </div>
+
+    <div id="resultsPreview" class="cards-list" style="margin-bottom:24px;"></div>
+
+    <!-- Réponses du quiz -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+      <p class="section-title">Mes réponses</p>
+      <button id="btnEditQuiz" style="font-size:0.78rem; font-weight:600; color:var(--orange); background:none; border:none; cursor:pointer; font-family:var(--font-body);">Modifier le quiz</button>
+    </div>
+
+    <div id="answersPreview" class="auth-card" style="margin-bottom:24px; padding:0;"></div>
+
+    <!-- Actions compte -->
+    <div class="cards-list" style="margin-bottom:32px;">
+      <button id="btnLogout" style="width:100%; padding:14px 16px; background:transparent; border:1.5px solid var(--gris-light); border-radius:var(--r-lg); font-family:var(--font-body); font-size:0.9rem; font-weight:600; color:#c83232; cursor:pointer; display:flex; align-items:center; gap:10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Se déconnecter
+      </button>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Accueil
+    </a>
+    <a href="catalogue.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Catalogue
+    </a>
+    <a href="results.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Résultats
+    </a>
+    <a href="assistant.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant
+    </a>
+  </nav>
+</div>
+
+<script src="js/core/storage.js"></script>
+<script src="js/scoring/weights.js"></script>
+<script>
+  if (!Storage.isLoggedIn()) {
+    window.location.replace('auth.html?from=results');
+  }
+
+  const user = Storage.loadUser();
+  const profile = Storage.loadProfile();
+  const results = Storage.loadResults();
+
+  // Rempli l'avatar et le nom
+  if (user) {
+    const name = user.username || '?';
+    document.getElementById('profileAvatar').textContent = name[0].toUpperCase();
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileEmail').textContent = user.email || '';
+  }
+
+  // Résultats top 3
+  const resultsPreview = document.getElementById('resultsPreview');
+  if (results && results.length) {
+    results.slice(0, 3).forEach(function (f, i) {
+      const card = document.createElement('div');
+      card.className = 'result-card' + (i === 0 ? ' rank-1' : '');
+      card.innerHTML = `
+        <div class="result-card-header">
+          <div class="rank-badge">${i + 1}</div>
+          <div class="result-card-name">${f.nom}</div>
+          <div class="result-score">${f.score}%</div>
+        </div>
+        <div class="result-bar-track">
+          <div class="result-bar-fill" style="width:${f.score}%;"></div>
+        </div>
+      `;
+      resultsPreview.appendChild(card);
+    });
+  } else {
+    resultsPreview.innerHTML = '<p style="font-size:0.85rem; color:var(--gris); padding:16px 0;">Aucun résultat — complète le quiz d\'abord.</p>';
+  }
+
+  // Réponses du quiz
+  const answersPreview = document.getElementById('answersPreview');
+  const LABELS = {
+    serie: 'Série lycée',
+    matieres: 'Domaine fort',
+    matiere_fav: 'Matière préférée',
+    niveau_maths: 'Niveau maths',
+    secteur_ci: 'Secteur CI',
+    budget: 'Budget mensuel',
+    duree: 'Durée études',
+    mobilite: 'Mobilité',
+    priorite: 'Priorité'
+  };
+
+  if (profile) {
+    const rows = Object.entries(LABELS).map(function (entry) {
+      const key = entry[0];
+      const label = entry[1];
+      const val = profile[key];
+      if (!val) return '';
+      return `<div class="profile-stat-row" style="padding:12px 16px;">
+        <span class="profile-stat-label">${label}</span>
+        <span class="profile-stat-value">${val}</span>
+      </div>`;
+    }).join('');
+    answersPreview.innerHTML = rows || '<p style="padding:16px; font-size:0.85rem; color:var(--gris);">Aucune réponse enregistrée.</p>';
+  } else {
+    answersPreview.innerHTML = '<p style="padding:16px; font-size:0.85rem; color:var(--gris);">Quiz non complété.</p>';
+  }
+
+  // Modifier le pseudo
+  document.getElementById('btnEditName').addEventListener('click', function () {
+    document.getElementById('editNameForm').style.display = 'block';
+    document.getElementById('newNameInput').value = user ? user.username : '';
+    document.getElementById('newNameInput').focus();
+  });
+
+  document.getElementById('btnCancelEdit').addEventListener('click', function () {
+    document.getElementById('editNameForm').style.display = 'none';
+  });
+
+  document.getElementById('btnSaveName').addEventListener('click', function () {
+    const val = document.getElementById('newNameInput').value.trim();
+    if (!val || val.length < 2) return;
+    const u = Storage.loadUser() || {};
+    u.username = val;
+    Storage.saveUser(u);
+    document.getElementById('profileName').textContent = val;
+    document.getElementById('profileAvatar').textContent = val[0].toUpperCase();
+    document.getElementById('editNameForm').style.display = 'none';
+  });
+
+  // Aller modifier le quiz
+  document.getElementById('btnEditQuiz').addEventListener('click', function () {
+    window.location.href = 'quiz.html';
+  });
+
+  // Déconnexion
+  document.getElementById('btnLogout').addEventListener('click', function () {
+    Storage.logout();
+    window.location.href = 'index.html';
+  });
+</script>
+</body>
+</html>
