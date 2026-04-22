@@ -1,12 +1,9 @@
-// api.js — connecté au backend YAO (server.js port 3001)
-// Route : POST http://localhost:3001/api/chat
-// Body  : { message: string, profil: object }
-// Resp  : { success: true, reponse: string }
+// api.js — connecté au backend YAO
+// Tout tourne sur le même port (3001) — server.js sert le frontend ET le backend
 
 const API = {
-    BASE_URL: 'http://localhost:3001',
+    BASE_URL: '',
 
-    // Mapping des valeurs quiz → labels lisibles pour le profil
     MATIERES_MAP: {
         maths_sciences: 'Mathématiques & Sciences',
         lettres_langues: 'Lettres & Langues',
@@ -47,6 +44,24 @@ const API = {
         duree_long: 7
     },
 
+    FILIERE_LABELS: {
+        info_miage: 'Informatique & MIAGE',
+        genie_civil: 'Génie Civil / BTP',
+        finance_compta: 'Finance & Comptabilité',
+        medecine: 'Médecine & Santé',
+        marketing: 'Marketing & Commerce',
+        droit: 'Droit & Sciences Juridiques',
+        telecom: 'Télécommunications',
+        agronomie: 'Agronomie',
+        lettres_shes: 'Lettres, SHS & Éducation',
+        gestion_rh: 'Gestion & Ressources Humaines',
+        architecture: 'Architecture & Urbanisme',
+        pharmacie: 'Pharmacie & Biologie',
+        eco_dev: 'Économie du Développement',
+        transport_logistique: 'Transport & Logistique',
+        journalisme: 'Journalisme & Communication'
+    },
+
     async ask(message, results) {
         const answers = Storage.loadAnswers();
         const profil = this.buildProfil(answers, results);
@@ -60,45 +75,36 @@ const API = {
 
             if (!res.ok) {
                 const err = await res.json().catch(() => ({}));
-                throw new Error(err.error || `Erreur serveur (${res.status})`);
+                throw new Error(err.error || 'Erreur serveur (' + res.status + ')');
             }
 
             const data = await res.json();
-
             if (!data.success) throw new Error(data.error || 'Erreur inconnue');
-
             return data.reponse;
 
         } catch (err) {
-            if (err.message.includes('fetch') || err.name === 'TypeError') {
+            if (err.name === 'TypeError' || err.message.includes('fetch')) {
                 throw new Error('SERVER_DOWN');
             }
             throw err;
         }
     },
 
-    // Construit le profil au format attendu par ai.service.js de YAO
     buildProfil(answers, results) {
-        const vals = Object.values(answers);
+        const vals = Object.values(answers || {});
 
-        const matieres = vals
-            .filter(v => this.MATIERES_MAP[v])
-            .map(v => this.MATIERES_MAP[v]);
-
-        const interets = vals
-            .filter(v => this.INTERETS_MAP[v])
-            .map(v => this.INTERETS_MAP[v]);
+        const matieres = vals.filter(v => this.MATIERES_MAP[v]).map(v => this.MATIERES_MAP[v]);
+        const interets = vals.filter(v => this.INTERETS_MAP[v]).map(v => this.INTERETS_MAP[v]);
 
         const budgetVal = vals.find(v => this.BUDGET_MAP[v] !== undefined);
         const dureeVal  = vals.find(v => this.DUREE_MAP[v]);
 
-        // Ville depuis la réponse mobilité
         let ville = 'Abidjan';
         if (answers[13] === 'mobilite_totale') ville = 'International';
-        if (answers[13] === 'mobilite_ci') ville = 'Côte d\'Ivoire';
+        if (answers[13] === 'mobilite_ci')     ville = "Côte d'Ivoire";
 
-        // Top filière depuis les résultats
-        const top = results && results[0] ? results[0].id.replace(/_/g, ' ') : null;
+        const topId = results && results[0] ? results[0].id : null;
+        const filiere = topId ? (this.FILIERE_LABELS[topId] || topId) : null;
 
         return {
             matieres_preferees: matieres.length ? matieres : ['Non renseignées'],
@@ -106,7 +112,7 @@ const API = {
             budget_annuel_fcfa: budgetVal !== undefined ? this.BUDGET_MAP[budgetVal] : null,
             ville_souhaitee: ville,
             duree_max_annees: dureeVal ? this.DUREE_MAP[dureeVal] : null,
-            filiere_recommandee: top
+            filiere_recommandee: filiere
         };
     }
 };

@@ -2,7 +2,17 @@
 
 const App = {
     init() {
+        this.checkAuth();
         this.hideSplash();
+    },
+
+    checkAuth() {
+        const user = Storage.loadUser();
+        if (user && user.username) {
+            setTimeout(() => {
+                window.location.href = 'results.html';
+            }, 800);
+        }
     },
 
     hideSplash() {
