@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const config = require("./config/env");
 const aiRoutes = require("./routes/ai.routes");
+const dataRoutes = require("./routes/data.routes");
 const errorHandler = require("./errorHandler");
 
 const app = express();
@@ -20,6 +21,9 @@ app.use(express.static(path.join(__dirname, "..")));
 
 app.use("/api", aiRoutes);
 
+app.use("/api", dataRoutes);
+
+
 app.get("/test", (req, res) => {
     res.json({ status: "ok", ia: !!config.ANTHROPIC_API_KEY });
 });
@@ -28,6 +32,7 @@ app.get("/test", (req, res) => {
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "index.html"));
 });
+
 
 app.use(errorHandler);
 
