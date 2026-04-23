@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const config = require("./config/env");
-const aiRoutes = require("./routes/ai.routes");
+const aiRoutes = require("./routes/ai");
 const dataRoutes = require("./routes/data.routes");
 const errorHandler = require("./errorHandler");
 

@@ -1,4 +1,7 @@
-const Anthropic = require("@anthropic-ai/sdk");
+// services/ai.service.js (VERSION MODIFIÉE)
+// Utilise le nouveau service claude.js
+
+const claudeService = require("./claude");
 const config = require("../config/env");
 
 const MODE_DEMO = `Désolé, l'assistant IA est temporairement indisponible. ` +
@@ -34,20 +37,27 @@ Règles strictes :
 };
 
 const sendMessage = async (message, profil = {}) => {
+    // Vérifier si l'API est disponible
     if (!config.ANTHROPIC_API_KEY) {
         return MODE_DEMO;
     }
 
-    const client = new Anthropic({ apiKey: config.ANTHROPIC_API_KEY });
-
-    const response = await client.messages.create({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 500,
-        system: buildSystemPrompt(profil),
-        messages: [{ role: "user", content: message }]
-    });
-
-    return response.content[0].text;
+    try {
+        // Construire le prompt système avec le profil
+        const systemPrompt = buildSystemPrompt(profil);
+        
+        // Utiliser le service Claude centralisé
+        const response = await claudeService.sendMessage(message, systemPrompt);
+        
+        return response;
+        
+    } catch (error) {
+        console.error("❌ Erreur lors de l'appel à Claude:", error.message);
+        
+        // En cas d'erreur, retourner un message d'erreur gracieux
+        return "Désolé, une erreur s'est produite. L'assistant est temporairement indisponible. " +
+               "Le reste du site fonctionne normalement.";
+    }
 };
 
 module.exports = { sendMessage };
